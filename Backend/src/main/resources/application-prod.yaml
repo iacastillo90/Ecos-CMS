@@ -1,0 +1,89 @@
+spring:
+  application:
+    name: Ecos-cms
+
+  # Configuración de la conexión a la base de datos MySQL
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://ecos-cms-db:3306/${MYSQL_DATABASE}}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # Configuración de HikariCP
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 60000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+
+  # Configuración de Hibernate y JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # Configuración de la conexión SMTP
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    debug: false
+
+# Configuración personalizada de email
+edtech:
+  email:
+    max-attachment-size: 10485760
+    default-from: ${MAIL_USERNAME}
+
+# Configuración del servidor
+server:
+  address: 0.0.0.0
+  port: ${SERVER_PORT:8088}
+  forward-headers-strategy: native
+
+# Configuración JWT
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+
+# Configuración de logging (reducido para producción)
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: INFO
+        security: WARN
+      hibernate: WARN
+    com:
+      edtech: INFO
+
+# Configuración de Swagger
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+    url: /api-docs
+  show-actuator: true
+
+# Actuator - Monitor
+management:
+  server:
+    port: 9090
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
